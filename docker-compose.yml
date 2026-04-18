@@ -1,0 +1,35 @@
+# Justificación: Orquestación de microservicios para garantizar la portabilidad 
+# del entorno de desarrollo y la escalabilidad del backend.
+services:
+  # Servidor Web (Nginx) - Puerto 80 para acceso directo
+  web:
+    image: nginx:stable-alpine
+    container_name: web_server
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+      - app_php
+
+  # Aplicación (PHP 8.2)
+  app_php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: app_php
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+
+  # Base de Datos (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: db_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: fintech
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
