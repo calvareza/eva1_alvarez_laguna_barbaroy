@@ -4,44 +4,41 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Análisis de Persistencia: 
- * Se implementa la definición de la tabla 'clients' mediante el constructor de esquemas de Laravel.
- * La elección de tipos de datos específicos (increments, string con longitud definida, date) 
- * responde a la necesidad de optimizar el almacenamiento y garantizar que la base de datos 
- * rechace datos inconsistentes desde el nivel de motor (MySQL).
- */
 return new class extends Migration
 {
     /**
-     * Ejecuta las migraciones para crear la estructura.
-     * Justificación: Se utiliza 'client_id' como PK para seguir la convención del modelo.
-     * El campo email es único para evitar duplicidad de identidades financieras.
+     * Ejecuta la creación del esquema de la tabla 'clients'.
+     * * Se implementan restricciones de unicidad para garantizar la integridad 
+     * de los datos de identidad (RUT) y contacto (Email), fundamentales 
+     * para la seguridad del Core Bancario.
      */
     public function up(): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            // Clave Primaria Autoincremental (INT UNSIGNED)
-            $table->increments('client_id'); 
-
-            // Datos Personales con límites de caracteres para optimizar índices
-            $table->string('first_name', 50); 
-            $table->string('last_name', 50); 
-
-            // Identificador único de contacto
-            $table->string('email', 100)->unique(); 
-
-            // Campos opcionales para flexibilidad del registro
-            $table->string('phone_number', 20)->nullable(); 
-            $table->date('date_of_birth')->nullable(); 
-
-            // Auditoría nativa de Laravel (created_at y updated_at)
+            // Identificador interno autoincremental para optimización de índices.
+            $table->id(); 
+            
+            // Contrato de Datos Financieros:
+            // El RUT actúa como identificador único legal del cliente.
+            $table->string('rut')->unique(); 
+            
+            // Segmentación de nombres para permitir búsquedas y reportes precisos.
+            $table->string('first_name');
+            $table->string('last_name');
+            
+            // Correo electrónico único para comunicaciones oficiales y seguridad.
+            $table->string('email')->unique();
+            
+            // Campo de contacto telefónico obligatorio según protocolo de registro.
+            $table->string('phone'); 
+            
+            // Registro automático de fecha de creación y actualización (Auditoría).
             $table->timestamps(); 
         });
     }
 
     /**
-     * Revierte la migración eliminando la tabla.
+     * Revierte la operación eliminando la tabla de la base de datos.
      */
     public function down(): void
     {

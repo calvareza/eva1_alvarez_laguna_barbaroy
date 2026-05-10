@@ -5,23 +5,21 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 
 /**
- * Justificación Técnica: DatabaseSeeder actúa como el punto de entrada principal 
- * para el poblado de la base de datos. Permite organizar y ejecutar de forma 
- * secuencial los diferentes seeders del sistema, garantizando que las tablas 
- * se llenen en el orden correcto para respetar las llaves foráneas y la integridad.
+ * Orquestador de Poblamiento de Datos.
+ * 
+ * Esta clase centraliza todos los seeders del sistema. Su importancia radica 
+ * en el orden: asegura que los datos se carguen siguiendo las dependencias 
+ * de llaves foráneas y la lógica de negocio del core bancario.
  */
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Ejecuta los seeders de la aplicación.
-     * * Justificación: Al registrar aquí el ClientSeeder::class, habilitamos 
-     * que el comando 'php artisan db:seed' (o migrate:fresh --seed) 
-     * automatice la creación de registros de prueba en un solo paso.
+     * Ejecutar la secuencia de carga.
      */
     public function run(): void
     {
         $this->call([
-            ClientSeeder::class, // Llamada al seeder de clientes para inyectar datos reales
+            ClientSeeder::class,
         ]);
     }
 }

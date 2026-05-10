@@ -3,19 +3,19 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Client; // Importación esencial para evitar el error "Class not found"
+use App\Models\Client;
 
 class ClientSeeder extends Seeder
 {
     /**
-     * Justificación Técnica: Se implementa este Seeder para automatizar el llenado 
-     * de la tabla de clientes en el entorno de desarrollo. Esto asegura la 
-     * consistencia de los datos para pruebas de API y verifica la comunicación 
-     * exitosa entre el contenedor PHP y el motor MySQL.
+     * Inyección de datos de prueba (Seed).
+     * 
+     * Este proceso es vital para que el entorno de desarrollo no esté vacío. 
+     * Creamos perfiles realistas que nos permitan testear búsquedas, 
+     * validaciones de RUT y flujos de usuario sin tener que crearlos a mano.
      */
     public function run(): void
     {
-        // Registro de prueba 1
         Client::create([
             'first_name' => 'Neervison',
             'last_name' => 'Laguna',
@@ -24,7 +24,6 @@ class ClientSeeder extends Seeder
             'date_of_birth' => '1992-04-10'
         ]);
 
-        // Registro de prueba 2
         Client::create([
             'first_name' => 'Agustina',
             'last_name' => 'Barbaroy',
@@ -33,7 +32,6 @@ class ClientSeeder extends Seeder
             'date_of_birth' => '1995-08-20'
         ]);
 
-        // Registro de prueba 3 (Opcional, para mayor volumen de datos)
         Client::create([
             'first_name' => 'Carlos',
             'last_name' => 'Alvarez',

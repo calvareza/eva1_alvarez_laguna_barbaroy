@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-/**
- * Justificación: El modelo Client permite interactuar con la tabla 'clients' 
- * mediante el ORM Eloquent, abstrayendo la lógica SQL y facilitando el CRUD.
- */
-class Client extends Model {
-    protected $primaryKey = 'client_id';
-    protected $fillable = ['first_name', 'last_name', 'email', 'phone_number', 'date_of_birth'];
+class Client extends Model
+{
+    use HasFactory;
+
+    // Aquí definimos qué datos permitimos que se guarden masivamente.
+    // Es nuestra primera capa de seguridad.
+    protected $fillable = [
+        'rut',
+        'first_name',
+        'last_name',
+        'email',
+        'phone'
+    ];
 }

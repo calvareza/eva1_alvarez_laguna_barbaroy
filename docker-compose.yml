@@ -1,7 +1,7 @@
-# Justificación: Orquestación de microservicios para garantizar la portabilidad 
-# del entorno de desarrollo y la escalabilidad del backend.
+# Orquestación de servicios para garantizar la portabilidad y escalabilidad del backend.
 services:
-  # Servidor Web (Nginx) - Puerto 80 para acceso directo
+  # Servidor Web (Nginx): Actúa como puerta de enlace (Gateway).
+  # Gestiona las peticiones externas y las redirige al procesador PHP.
   web:
     image: nginx:stable-alpine
     container_name: web_server
@@ -13,7 +13,8 @@ services:
     depends_on:
       - app_php
 
-  # Aplicación (PHP 8.2)
+  # Motor de Aplicación (PHP 8.2-FPM): El "Cerebro" del sistema.
+  # Procesa las validaciones, reglas de negocio y la comunicación con la base de datos.
   app_php:
     build:
       context: .
@@ -22,8 +23,11 @@ services:
     volumes:
       - ./:/var/www/html
     working_dir: /var/www/html
+    depends_on:
+      - db
 
-  # Base de Datos (MySQL)
+  # Bóveda de Datos (MySQL 8.0): Almacenamiento persistente.
+  # Configurado con políticas de reinicio automático y volúmenes dedicados.
   db:
     image: mysql:8.0
     container_name: db_mysql
@@ -33,3 +37,12 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    # COMPONENTE CRÍTICO: Persistencia de datos mediante volumen nombrado.
+    # Evita la pérdida de información ante reinicios del contenedor.
+    volumes:
+      - db_data:/var/lib/mysql
+
+# Definición de volúmenes lógicos
+# Independiza el almacenamiento de datos del ciclo de vida de los contenedores.
+volumes:
+  db_data:
